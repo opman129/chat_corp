@@ -23,7 +23,7 @@ socket.on('roomUsers', ({ room, users }) => {
 socket.on('message', message => {
   console.log(message);
   outputMessage(message);
- 
+
   // Scroll down
   chatMessages.scrollTop = chatMessages.scrollHeight;
 });
@@ -33,13 +33,7 @@ chatForm.addEventListener('submit', e => {
   e.preventDefault();
 
   // Get message text
-  let msg = e.target.elements.msg.value;
-  
-  msg = msg.trim();
-  
-  if (!msg){
-    return false;
-  }
+  const msg = e.target.elements.msg.value;
 
   // Emit message to server
   socket.emit('chatMessage', msg);
@@ -53,15 +47,10 @@ chatForm.addEventListener('submit', e => {
 function outputMessage(message) {
   const div = document.createElement('div');
   div.classList.add('message');
-  const p = document.createElement('p');
-  p.classList.add('meta');
-  p.innerText = message.username;
-  p.innerHTML += `<span>${message.time}</span>`;
-  div.appendChild(p);
-  const para = document.createElement('p');
-  para.classList.add('text');
-  para.innerText = message.text;
-  div.appendChild(para);
+  div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
+  <p class="text">
+    ${message.text}
+  </p>`;
   document.querySelector('.chat-messages').appendChild(div);
 }
 
@@ -72,10 +61,7 @@ function outputRoomName(room) {
 
 // Add users to DOM
 function outputUsers(users) {
-  userList.innerHTML = '';
-  users.forEach(user=>{
-    const li = document.createElement('li');
-    li.innerText = user.username;
-    userList.appendChild(li);
-  });
- }
+  userList.innerHTML = `
+    ${users.map(user => `<li>${user.username}</li>`).join('')}
+  `;
+}
