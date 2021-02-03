@@ -3,6 +3,8 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 
+const app = express();
+
 //set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
