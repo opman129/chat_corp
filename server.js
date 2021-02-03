@@ -19,16 +19,16 @@ io.on('connection', socket => {
     socket.emit('message', formatMessage(botName, 'Welcome to ChatCorp!'));
 
     //Broadcast when a user connects to everyone except the client
-    socket.broadcast.emit('message', 'A user has joined the chat');
+    socket.broadcast.emit('message', formatMessage(botName, 'A user has joined the chat'));
 
     //Runs when a user disconnects
     socket.on('disconnect', () => {
-        io.emit('message', ' A user has left the chat');
+        io.emit('message', formatMessage(botName, 'A user has left the chat'));
     });
 
     //Listen for chatMessage
     socket.on('chatMessage', msg => {
-        io.emit('message', msg);
+        io.emit('message', formatMessage('USER', msg));
     });
 });
 
