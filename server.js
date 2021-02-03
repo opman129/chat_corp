@@ -3,7 +3,8 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const formatMessage = require('./utils/messages');
-const { Socket } = require('dgram');
+const { userJoin, getCurrentUser } = require('./utils/users');
+// const { Socket } = require('dgram');
 
 const app = express();
 const server = http.createServer(app);
@@ -17,6 +18,9 @@ const botName = 'ChatCorp Bot'
 //Run when client connect
 io.on('connection', socket => {
     socket.on('joinRoom', ({ username, room }) =>{
+        const user = userJoin(socket.id, username, room);
+
+        socket.join(user.room);
     //Welcome message to single client/User
     socket.emit('message', formatMessage(botName, 'Welcome to ChatCorp!'));
 
