@@ -17,7 +17,7 @@ const botName = 'ChatCorp Bot'
 
 //Run when client connect
 io.on('connection', socket => {
-    socket.on('joinRoom', ({ username, room }) =>{
+    socket.on('joinRoom', ({ username, room }) => {
         const user = userJoin(socket.id, username, room);
 
         socket.join(user.room);
@@ -25,7 +25,9 @@ io.on('connection', socket => {
     socket.emit('message', formatMessage(botName, 'Welcome to ChatCorp!'));
 
     //Broadcast when a user connects to everyone except the client
-    socket.broadcast.emit('message', formatMessage(botName, 'A user has joined the chat'));
+    socket.broadcast.to(user.room).emit(
+        'message',
+        formatMessage(botName, `${user.username} has joined the chat`));
     });
 
     //Listen for chatMessage
