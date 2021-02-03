@@ -2,6 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
+const formatMessage = require('./utils/messages');
 
 const app = express();
 const server = http.createServer(app);
@@ -10,10 +11,12 @@ const io = socketio(server);
 //set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+const botName = 'ChatCorp Bot'
+
 //Run when client connect
 io.on('connection', socket => {
     //Welcome message to single client/User
-    socket.emit('message', 'Welcome to Chat Corp');
+    socket.emit('message', formatMessage(botName, 'Welcome to ChatCorp!'));
 
     //Broadcast when a user connects to everyone except the client
     socket.broadcast.emit('message', 'A user has joined the chat');
