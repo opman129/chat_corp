@@ -12,14 +12,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Run when client connect
 io.on('connection', socket => {
-    console.log("New Connection")
+    //Welcome message to single client/User
+    socket.emit('message', 'Welcome to Chat Corp');
+
+    //Broadcast when a user connects to everyone except the client
+    socket.broadcast.emit('message', 'A user has joined the chat');
+
+    //Runs when a user disconnects
+    socket.on('disconnect', () => {
+        io.emit('message', ' A user has left the chat');
+    });
 });
-
-
-
-
-
-
 
 
 //Environment Variable for PORT);
